@@ -380,6 +380,10 @@ int main() {
     cin>>A>>n;
     columnVector V(n);
     cin>>V;
+    if( n != A.size() ){
+        cout<<"invalid dimensions\n";
+        return 0;
+    }
     cout<<"step #0:\n";
     cout<<fixed<<setprecision(2)<<A<<V;
     columnVector ans = forwardElimination(A,V);
