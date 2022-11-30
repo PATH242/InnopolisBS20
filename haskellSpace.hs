@@ -3,6 +3,7 @@
 import Data.Bits (Bits(xor))
 import CodeWorld
 -- Assignment 2 
+-- This assignment needs to run in CodeWorld environment 
 
 data Line a = Line [a] a [a] deriving (Show)
 
