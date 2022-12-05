@@ -3,7 +3,7 @@
 import Data.Bits (Bits(xor))
 import CodeWorld
 -- Assignment 2 
--- This assignment needs to run in CodeWorld environment 
+-- Run this in codeworld environment
 
 data Line a = Line [a] a [a] deriving (Show)
 
@@ -397,7 +397,7 @@ shiftSpaceRightLineWise (Space (Line a b []) ) = []
 shiftSpaceRightLineWise (Space (Line a b c) ) =  do
   let newSpace =  Space( Line ([b] ++ a) (head c) (drop 1 c) )
   let newLine = Line (shiftSpaceLeftCellWise newSpace ) newSpace (shiftSpaceRightCellWise newSpace) 
-  let result = [newLine] ++ (shiftSpaceLeftLineWise newSpace)
+  let result = [newLine] ++ (shiftSpaceRightLineWise newSpace)
   result
 
 -- | A function that converts each cell in a discrete space into a version of the
@@ -416,15 +416,19 @@ applyConwayRule space = mapSpace conwayRule (spaceShifts space)
  
 -- Exercise 1.14
 
--- | A utility function to render a list of lines
-renderListOfLines :: [Line Picture] -> Picture
-renderListOfLines [] = blank
-renderListOfLines (x:xs) = renderLine x <> (translated 0 (-1) (renderListOfLines xs))
+-- | utility functions to render a list of lines
+renderListOfLinesLeft :: [Line Picture] -> Picture
+renderListOfLinesLeft [] = blank
+renderListOfLinesLeft (x:xs) = renderLine x <> (translated 0 (-1) (renderListOfLinesLeft xs))
+
+renderListOfLinesRight :: [Line Picture] -> Picture
+renderListOfLinesRight [] = blank
+renderListOfLinesRight (x:xs) = renderLine x <> (translated 0 (1) (renderListOfLinesRight xs))
 
 -- | Render a space of 1x1 pictures.
 renderSpace :: Space Picture -> Picture
 renderSpace (Space (Line xs y zs)) =   
-  (translated 0 1 (renderListOfLines xs )) <> (renderLine y) <> (translated 0 (-1) (renderListOfLines zs ))
+  (translated 0 1 (renderListOfLinesRight xs )) <> (renderLine y) <> (translated 0 (-1) (renderListOfLinesLeft zs ))
 
 
 -- | Animate Conway's Game of Life, starting with a given space and updating it every second.
